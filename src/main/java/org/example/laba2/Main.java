@@ -6,18 +6,21 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
+
 
 public class Main {
     HashMap<Integer, Integer> errorsAndIntervals;
+    Logger logger = Logger.getLogger(Main.class.getName());
 
-    int xi;
-
-    /*    Ме́тод после́довательных приближе́ний (метод повторных подстановок, метод простой итерации),
+    /*Ме́тод после́довательных приближе́ний (метод повторных подстановок, метод простой итерации),
     один из общих методов приближённого решения уравнений. В ряде случаев хорошая сходимость построенных
-     этим методом приближений позволяет применять его в практике вычислений.*/
-    Main() {
+     этим методом приближений позволяет применять его в практике вычислений.
+     https://bigenc.ru/c/metod-posledovatel-nykh-priblizhenii-beeb45
+     */
+    Main(String filename) {
         try {
-            errorsAndIntervals = JSONReader.getDataFromJSON("errors.json");
+            errorsAndIntervals = JSONReader.getDataFromJSON(filename);
         } catch (IOException e) {
             System.out.println("IO Exception:" + e.getMessage());
             throw new RuntimeException(e);
@@ -28,12 +31,9 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        int[] ints = new int[26];
-
-        for (int i = 0; i < ints.length; i++) {
-            ints[i] = i + 1;
-        }
-
+        Main main = new Main("errors.json");
+        int b = main.getGeneralCountOfErrors();
+        System.out.println("b = " + b);
 
     }
 
@@ -46,11 +46,11 @@ public class Main {
         int b = iValues.stream().max(Integer::compareTo).get() + 1;
 
         do {
-            System.out.println("Current b is " + b);
+            logger.fine("Current b is " + b);
             resultLeft = 0;
             resultRight = 0;
 
-            resultRight = (double) (26 * 250) / ((b + 1) * 250 - 4258);
+            resultRight = (double) (26 * getSigmaResult(iValues)) / ((b + 1) * getSigmaResult(iValues) - getSigmaMultiplyIResult(iValues));
             //i номер ошибки
             for (int i : iValues) {
                 resultLeft += (double) 1 / (b - i + 1);
@@ -59,7 +59,7 @@ public class Main {
             b++;
 
         } while ((resultLeft - resultRight) > epsilon);
-        System.out.println("B = " + b);
+        logger.info("B = %d".formatted(b));
         return b;
     }
 
@@ -72,20 +72,25 @@ public class Main {
         for (Integer i : iValues) {
             result += errorsAndIntervals.get(i);
         }
+        logger.fine("getSigmaResult result = %d".formatted(result));
         return result;
     }
 
     /**
      *
-     * @param n
-     * количество найденных ошибок
-     * @param xi
+     * @param iValues
+     * все возможные варианты i
      * @return
      * интервал времени перед i-ой ошибкой
      * результат Σ(i*xi)
      */
-/*    public int getSigmaMultiplyIResult(int n, int xi) {
-
-    }*/
+    public int getSigmaMultiplyIResult(ArrayList<Integer> iValues) {
+        int result = 0;
+        for (Integer i : iValues) {
+            result += errorsAndIntervals.get(i) * i;
+        }
+        logger.fine("getSigmaMultiplyIResult result = %d".formatted(result));
+        return result;
+    }
 
 }
