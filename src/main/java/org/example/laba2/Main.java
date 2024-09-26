@@ -112,6 +112,7 @@ public class Main {
     }
 
     public int getProportionalFactor(ArrayList<Integer> iValues) {
-        return 0;
+        return 999;
+
     }
 }
