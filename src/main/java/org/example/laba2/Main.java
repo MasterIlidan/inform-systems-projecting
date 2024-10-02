@@ -59,12 +59,12 @@ public class Main {
         System.out.printf("k = %.4f\n", k);
         //найти среднее время до появления ошибки
         double x = main.getAbsTimeBeforeError(k,b);
-        System.out.printf("x = %.4f\n", x);
+        System.out.printf("x = %.4f hours\n", x);
         //найти время до окончания тестирования
         double t = main.getTimeBeforeTestEnd(k,b);
-        System.out.printf("t = %.4f\n", t);
+        System.out.printf("t = %.4f hours\n", t);
     }
-
+    //метод поиска общего количества ошибок
     public double getGeneralCountOfErrors() {
         ArrayList<Integer> iValues = new ArrayList<>(errorsAndIntervals.keySet()); //все значения i
 
@@ -128,9 +128,9 @@ public class Main {
         return (double) 1 / (propFactor * (countOfErrors - errorsAndIntervals.size()));
     }
     public double getTimeBeforeTestEnd(double propFactor, double countOfErrors){
-        return (1 / propFactor) * getSumOFRestTime(countOfErrors, errorsAndIntervals.size());
+        return (1 / propFactor) * getSumOfRestTime(countOfErrors, errorsAndIntervals.size());
     }
-    public double getSumOFRestTime(double errorsCount, int arrayLength){
+    public double getSumOfRestTime(double errorsCount, int arrayLength){
         double result = 0;
         for (int i = 0, j = 1; i < errorsCount - arrayLength; i++, j++) {
             result += (double) 1 / j ;
