@@ -51,11 +51,21 @@ public class Main {
             filename = scanner.nextLine();
         }
         Main main = new Main(filename);
-        int b = main.getGeneralCountOfErrors();
-        System.out.println("b = " + b);
+        //найти общее количество ошибок
+        double b = main.getGeneralCountOfErrors();
+        System.out.printf("b = %.4f\n",b);
+        //найти коэффициент пропорциональности
+        double k = main.getProportionalityFactor(b);
+        System.out.printf("k = %.4f\n", k);
+        //найти среднее время до появления ошибки
+        double x = main.getAbsTimeBeforeError(k,b);
+        System.out.printf("x = %.4f\n", x);
+        //найти время до окончания тестирования
+        double t = main.getTimeBeforeTestEnd(k,b);
+        System.out.printf("t = %.4f\n", t);
     }
 
-    public int getGeneralCountOfErrors() {
+    public double getGeneralCountOfErrors() {
         ArrayList<Integer> iValues = new ArrayList<>(errorsAndIntervals.keySet()); //все значения i
 
         double resultLeft; //результат левой части уравнения
@@ -110,9 +120,21 @@ public class Main {
         logger.fine("getSigmaMultiplyIResult result = %d".formatted(result));
         return result;
     }
-
-    public int getProportionalFactor(ArrayList<Integer> iValues) {
-        return 999;
-
+    public double getProportionalityFactor(double countOfErrors) {
+        ArrayList<Integer> iValues = new ArrayList<>(errorsAndIntervals.keySet());
+        return (double) errorsAndIntervals.size() / ((countOfErrors +1) * getSigmaResult(iValues) - getSigmaMultiplyIResult(iValues));
+    }
+    public double getAbsTimeBeforeError(double propFactor, double countOfErrors) {
+        return (double) 1 / (propFactor * (countOfErrors - errorsAndIntervals.size()));
+    }
+    public double getTimeBeforeTestEnd(double propFactor, double countOfErrors){
+        return (1 / propFactor) * getSumOFRestTime(countOfErrors, errorsAndIntervals.size());
+    }
+    public double getSumOFRestTime(double errorsCount, int arrayLength){
+        double result = 0;
+        for (int i = 0, j = 1; i < errorsCount - arrayLength; i++, j++) {
+            result += (double) 1 / j ;
+        }
+        return result;
     }
 }
