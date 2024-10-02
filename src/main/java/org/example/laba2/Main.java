@@ -6,6 +6,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 
@@ -31,10 +32,27 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Main main = new Main("errors.json");
+        String filename = "";
+
+        for (String arg : args) { //передача пути до файла в параметраз запуска
+            if (arg.equals("errors.json")) {
+                filename = arg;
+            }
+        }
+
+        if (filename.isEmpty()) { //если в аргументах не нашлось пути до файла, то ввод пользователем
+            System.out.println("""
+        Enter path to JSON data. examples:
+        errors.json
+        ./folder/errors.json
+        C:/folder/errors.json
+        """);
+            Scanner scanner = new Scanner(System.in);
+            filename = scanner.nextLine();
+        }
+        Main main = new Main(filename);
         int b = main.getGeneralCountOfErrors();
         System.out.println("b = " + b);
-
     }
 
     public int getGeneralCountOfErrors() {
@@ -42,7 +60,7 @@ public class Main {
 
         double resultLeft; //результат левой части уравнения
         double resultRight; //результат правой части уравнения
-        double epsilon = 0.1; //задаваемая максимальная погрешность
+        double epsilon = 0.01; //задаваемая максимальная погрешность
         int b = iValues.stream().max(Integer::compareTo).get() + 1;
 
         do {
@@ -93,4 +111,8 @@ public class Main {
         return result;
     }
 
+    public int getProportionalFactor(ArrayList<Integer> iValues) {
+        return 999;
+
+    }
 }
