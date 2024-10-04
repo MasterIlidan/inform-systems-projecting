@@ -78,6 +78,14 @@ public class Main {
         result += (Long) root.get("calculatedParamsForEveryTarget") * (Long) root.get("countOfTargets");
         return (int) result;
     }
+
+    /**
+     * <потенциальный объем программы> и <уровень языка>
+     * @param programVolume
+     * результат метода getPotentialProgramVolume
+     * @return
+     * Потенциальное число ошибок
+     */
     public double getPotentialErrorCount(double programVolume){
         if (root.get("languageLevel") == null) {
             throw new RuntimeException("Language Level not found in JSON");
