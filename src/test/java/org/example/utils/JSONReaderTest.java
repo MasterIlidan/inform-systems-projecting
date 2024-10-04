@@ -18,7 +18,7 @@ class JSONReaderTest {
         expected.put(2, 5);
         expected.put(3, 13);
 
-        HashMap<Integer, Integer> readData = JSONReader.getDataFromJSON("./src/test/java/org/example/utils/testData.json");
+        HashMap<Integer, Integer> readData = JSONReader.getDataFromJSONLaba2("./src/test/java/org/example/utils/testData.json");
 
         for (Integer key : readData.keySet()) {
             System.out.println(key + " : " + readData.get(key));

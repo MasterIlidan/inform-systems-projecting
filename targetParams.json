@@ -1,0 +1,12 @@
+{
+  "countOfTargets": 20,
+  "measuresForEveryTrackedParams": 30,
+  "trackedParamsForEveryTarget": 10,
+  "calculatedParamsForEveryTarget": 3,
+  "startedRating": 1000,
+  "languageLevel": 1.53,
+  "countOfProgramsInPeriod": 4,
+  "volumeOfPrograms": [5,7,8,11],
+  "countOfErrors": [0,2,5,4],
+  "estimatedSizeOfProgram": 15
+}

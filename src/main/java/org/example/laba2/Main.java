@@ -21,7 +21,7 @@ public class Main {
      */
     Main(String filename) {
         try {
-            errorsAndIntervals = JSONReader.getDataFromJSON(filename);
+            errorsAndIntervals = JSONReader.getDataFromJSONLaba2(filename);
         } catch (IOException e) {
             System.out.println("IO Exception:" + e.getMessage());
             throw new RuntimeException(e);
