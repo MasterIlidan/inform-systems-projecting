@@ -47,44 +47,34 @@ public class laba3z2 {
         return nadeznostprog;
     }
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
+        double lambda = 1.53;
+        int c = 25;
+        int p = 28;
+        int opt = 8;
+        int rpp = 3;
+        int in = c * p * opt;
+        int out = c * rpp;
+        int n2 = in + out;
 
-    int c = 25; //Число целей
-    int p = 28; //Кол-во измерений параметра
-    int opt = 8; //Кол-во отслеживаемых параметров
-    int rpp = 3; //Кол-во расчитываемых параметров по каждой цели
-    int in = c * p * opt; //Входные параметры
-    int out = c * rpp; //Выходные параметры
-    int n2 = in + out; //Суммарное кол-во расчитываемых параметров
-
-       System.out.println("\nЗадание №2");
-
-       double result1 = countModules(n2);
-       System.out.println("Число модулей: " + result1);
-
-       double result2 = countLevel(n2);
-       System.out.println("Число уровней: " + result2);
-
-       double result3 = lenghtProgramm(result1);
-       System.out.println("Длинна программы: " + result3);
-
-       double result4 = obemProgramm(result1);
-       System.out.println("Объем прогрммного обеспечения: " + result4);
-
-       double result5 = countAssamb(result3);
-       System.out.println("Количество команд ассемблера: " + result5);
-
-       int chisloprogramistov = 5;
-       int proizvoditelnost = 20;
-       double result6 = countTime(result3, chisloprogramistov,proizvoditelnost);
-       System.out.println("Время программирования (дни): " + result6);
-
-       double result7 = countError(result4);
-       System.out.println("Потенциальное количество ошибок: " + result7);
-
-       double result8 = nadeznostProg(result6, result7);
-       System.out.println("Начальная надежность программного обеспечения: " + result8);
-
-}
-
+        System.out.println("\nЗадание №2");
+        double result1 = countModules(n2);
+        System.out.println("Число модулей: " + result1);
+        double result2 = countLevel(n2);
+        System.out.println("Число уровней: " + result2);
+        double result3 = lenghtProgramm(result1);
+        System.out.println("Длинна программы: " + result3);
+        double result4 = obemProgramm(result1);
+        System.out.println("Объем прогрммного обеспечения: " + result4);
+        double result5 = countAssamb(result3);
+        System.out.println("Количество команд ассемблера: " + result5);
+        int chisloprogramistov = 5;
+        int proizvoditelnost = 20;
+        double result6 = countTime(result3, chisloprogramistov, proizvoditelnost);
+        System.out.println("Время программирования (дни): " + result6);
+        double result7 = countError(result4);
+        System.out.println("Потенциальное количество ошибок: " + result7);
+        double result8 = nadeznostProg(result6, result7);
+        System.out.println("Начальная надежность программного обеспечения: " + result8);
+    }
 }
