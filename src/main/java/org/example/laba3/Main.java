@@ -28,12 +28,43 @@ public class Main {
 
         Main main = new Main(filename);
 
-        int allParams =  main.getInternalAndExternalParams();
+        int allParams = main.getInternalAndExternalParams();
         System.out.printf("Count of operands: %d\n", allParams);
+
         double programVolume = main.getPotentialProgramVolume(allParams);
         System.out.printf("Potential program Volume: %.4f\n", programVolume);
+
         double potentialErrorCount = main.getPotentialErrorCount(programVolume);
         System.out.println("Potential Error Count: " + potentialErrorCount);
+
+        System.out.println("\nЗадание №2");
+
+        double countOfModules = main.getCountOfModules(allParams);
+        System.out.println("Число модулей: " + countOfModules);
+
+        double countOfLevels = main.getCountOfLevels(allParams);
+        System.out.println("Число уровней: " + countOfLevels);
+
+        double lengthOfProgram = main.getLengthOfProgram(countOfModules);
+        System.out.println("Длинна программы: " + lengthOfProgram);
+
+        double volumeOfProgram = main.getVolumeOfProgram(countOfModules);
+        System.out.println("Объем прогрммного обеспечения: " + volumeOfProgram);
+
+        double assemblerCommandsCount = main.getAssemblerCommandsCount(lengthOfProgram);
+        System.out.println("Количество команд ассемблера: " + assemblerCommandsCount);
+
+        int countOfProgrammers = 5;
+        int performancePerProgrammer = 20;
+        double programCalendarTime = main.getProgramCalendarTime(lengthOfProgram, countOfProgrammers, performancePerProgrammer);
+        System.out.println("Время программирования (дни): " + programCalendarTime);
+
+        double potentialErrorsCount = main.getPotentialErrorsCount(volumeOfProgram);
+        System.out.println("Потенциальное количество ошибок: " + potentialErrorsCount);
+
+        double programReliability = main.getProgramReliability(programCalendarTime, potentialErrorsCount);
+        System.out.println("Начальная надежность программного обеспечения: " + programReliability);
+
     }
 
     Main(String filename) {
@@ -49,11 +80,8 @@ public class Main {
     }
 
     /**
-     *
-     * @param minNumOfOperands
-     * минимальное число различных операндов, получаемый в getInternalAndExternalParams
-     * @return
-     * потенциальный объем программы V*
+     * @param minNumOfOperands минимальное число различных операндов, получаемый в getInternalAndExternalParams
+     * @return потенциальный объем программы V*
      */
     public double getPotentialProgramVolume(int minNumOfOperands) {
         return (minNumOfOperands + 2) * Math.log(minNumOfOperands + 2);
@@ -62,12 +90,11 @@ public class Main {
     /**
      * расчет ведется из данных из таблицы входных данных:
      * (<Число одновременно сопровождаемых целей> * <Количество измерений каждого отслеживаемого параметра>
-     *     * <Количество отслеживаемых параметров>) + (<Число одновременно сопровождаемых целей> * <Количество рассчитываемых
+     * * <Количество отслеживаемых параметров>) + (<Число одновременно сопровождаемых целей> * <Количество рассчитываемых
      * параметров по каждой цели>)
-     * @return
-     * минимальное число различных операндов, в роли которого обычно выступает
-     * число независимых входных и выходных параметров;
      *
+     * @return минимальное число различных операндов, в роли которого обычно выступает
+     * число независимых входных и выходных параметров;
      */
     public int getInternalAndExternalParams() {
         long result = 1;
@@ -81,17 +108,54 @@ public class Main {
 
     /**
      * <потенциальный объем программы> и <уровень языка>
-     * @param programVolume
-     * результат метода getPotentialProgramVolume
-     * @return
-     * Потенциальное число ошибок
+     *
+     * @param programVolume результат метода getPotentialProgramVolume
+     * @return Потенциальное число ошибок
      */
-    public double getPotentialErrorCount(double programVolume){
+    public double getPotentialErrorCount(double programVolume) {
         if (root.get("languageLevel") == null) {
             throw new RuntimeException("Language Level not found in JSON");
         }
-        double languageLevel = (Double)root.get("languageLevel");
-        return Math.pow(programVolume, 2)/ (3000 * languageLevel);
+        double languageLevel = (Double) root.get("languageLevel");
+        return Math.pow(programVolume, 2) / (3000 * languageLevel);
+    }
+
+    public double getCountOfModules(int allParams) {
+        double countOfModules = (double) allParams / 8;
+        if (countOfModules > 8) {
+            countOfModules = ((double) allParams / 8) + ((double) allParams / (Math.pow(8, 2)));
+        } else {
+            return countOfModules;
+        }
+        return countOfModules;
+    }
+
+    public double getCountOfLevels(int allParams) {
+        return (Math.log(allParams) / 3) + 1;
+    }
+
+    public double getLengthOfProgram(double countOfModules) {
+        return (220 * countOfModules) + (countOfModules * Math.log(countOfModules));
+    }
+
+    public double getVolumeOfProgram(double programModules) {
+        return programModules * 220 * (Math.log(48));
+    }
+
+    public double getAssemblerCommandsCount(double programLength) {
+        return (3 * programLength) / 8;
+    }
+
+    public double getProgramCalendarTime(double programLength, int countOfProgrammers, int perfomancePerProgrammer) {
+        return (3 * programLength) / (8 * countOfProgrammers * perfomancePerProgrammer);
+    }
+
+    public double getPotentialErrorsCount(double programVolume) {
+        return programVolume / 3000;
+    }
+
+    public double getProgramReliability(double x, double potentialErrorsCount) {
+        return x * 8 / 2 * Math.log(potentialErrorsCount);
     }
 
 }
