@@ -9,7 +9,8 @@ import java.io.IOException;
 import java.util.HashMap;
 
 public class JSONReader {
-    public static HashMap<Integer,Integer> getDataFromJSON (String filename) throws IOException, ParseException {
+    //получить данные для лабораторной работы 2
+    public static HashMap<Integer,Integer> getDataFromJSONLaba2(String filename) throws IOException, ParseException {
         HashMap<Integer,Integer> stringList = new HashMap<>();
         JSONParser jsonParser = new JSONParser();
         Object object = jsonParser
@@ -20,5 +21,13 @@ public class JSONReader {
                     Integer.parseInt((String) jsonObject.get(key)));
         }
         return stringList;
+    }
+    //получить данные для лабораторной работы 3
+    public static JSONObject getDataFromJSONLaba3(String filename) throws IOException, ParseException {
+        HashMap<String, Integer> stringList = new HashMap<>();
+        JSONParser jsonParser = new JSONParser();
+        Object object = jsonParser.parse(new FileReader(filename));
+        JSONObject jsonObject = (JSONObject) object;
+        return jsonObject;
     }
 }
