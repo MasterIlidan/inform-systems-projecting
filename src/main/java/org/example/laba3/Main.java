@@ -1,10 +1,12 @@
 package org.example.laba3;
 
 import org.example.utils.JSONReader;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -37,6 +39,10 @@ public class Main {
         double potentialErrorCount = main.getPotentialErrorCount(programVolume);
         System.out.println("Potential Error Count: " + potentialErrorCount);
 
+
+        /*------------ЗАДАНИЕ 2-----------------*/
+
+
         System.out.println("\nЗадание №2");
 
         double countOfModules = main.getCountOfModules(allParams);
@@ -64,6 +70,52 @@ public class Main {
 
         double programReliability = main.getProgramReliability(programCalendarTime, potentialErrorsCount);
         System.out.println("Начальная надежность программного обеспечения: " + programReliability);
+
+
+        /*------------ЗАДАНИЕ 3-----------------*/
+
+
+        System.out.println();
+
+        int startRating = ((Long) main.root.get("startedRating")).intValue();
+        int countOfPrograms = ((Long) main.root.get("countOfProgramsInPeriod")).intValue();
+        ArrayList<Integer> volume = new ArrayList<>();
+        for (Object value : (JSONArray) main.root.get("volumeOfPrograms")) {
+            volume.add(((Long) value).intValue());
+        }
+        ArrayList<Integer> countOfErrors = new ArrayList<>();
+        for (Object value : (JSONArray) main.root.get("countOfErrors")) {
+            countOfErrors.add(((Long) value).intValue());
+        }
+
+        double prevRating = main.getRatingByIteration(startRating, volume.get(0), countOfErrors.get(0),1);
+        System.out.printf("Count of program %d rating %f\n", 1, prevRating);
+        for (int i = 1; i < countOfPrograms; i++) {
+            prevRating = main.getRatingByIteration(prevRating, volume.get(i), countOfErrors.get(i),1);
+            System.out.printf("Count of program %d rating %f\n", i + 1, prevRating);
+        }
+
+        prevRating = main.getRatingByIteration(startRating, volume.get(0), countOfErrors.get(0),2);
+        System.out.printf("Count of program %d rating %f\n", 1, prevRating);
+        for (int i = 1; i < countOfPrograms; i++) {
+            prevRating = main.getRatingByIteration(prevRating, volume.get(i), countOfErrors.get(i),2);
+            System.out.printf("Count of program %d rating %f\n", i + 1, prevRating);
+        }
+
+        prevRating = main.getRatingByIteration(startRating, volume.get(0), countOfErrors.get(0),3);
+        System.out.printf("Count of program %d rating %f\n", 1, prevRating);
+        for (int i = 1; i < countOfPrograms; i++) {
+            prevRating = main.getRatingByIteration(prevRating, volume.get(i), countOfErrors.get(i),3);
+            System.out.printf("Count of program %d rating %f\n", i + 1, prevRating);
+        }
+
+        int estimatedSizeOfProgram = ((Long) main.root.get("estimatedSizeOfProgram")).intValue();
+        for (int i = 1; i <= 3; i++) {
+            double expectedErrors = main.getExpectedErrors(startRating,
+                    estimatedSizeOfProgram,
+                    i);
+            System.out.printf("Expected Errors (type %d): %.4f\n",i, expectedErrors);
+        }
 
     }
 
@@ -158,4 +210,47 @@ public class Main {
         return x * 8 / 2 * Math.log(potentialErrorsCount);
     }
 
+    public double getRatingByIteration(double rating, double volume, double errorCount, int factorType) {
+        switch (factorType) {
+            case 1 -> {
+                return rating * (1 + (double) 1 / 1000 * (volume - (errorCount / getFactorA((Double) root.get("languageLevel"), rating))));
+            }
+            case 2 -> {
+                return rating * (1 + (double) 1 / 1000 * (volume - (errorCount / getFactorB((Double) root.get("languageLevel"), rating))));
+
+            }
+            case 3 -> {
+                return rating * (1 + (double) 1 / 1000 * (volume - (errorCount / getFactorC((Double) root.get("languageLevel"), rating))));
+            }
+            default -> throw new RuntimeException("Unsupported factor type: " + factorType);
+        }
+    }
+
+    public double getFactorA(double languageLevel, double previousRating) {
+        return 1 / (languageLevel + previousRating);
+    }
+
+    public double getFactorB(double languageLevel, double previousRating) {
+        return 1 / (languageLevel * previousRating);
+    }
+
+    public double getFactorC(double languageLevel, double previousRating) {
+        return 1 / languageLevel + 1 / previousRating;
+    }
+
+    public double getExpectedErrors(double lastRating, int expectedProgramVolume, int factorType) {
+        switch (factorType) {
+            case 1 -> {
+                return getFactorA((Double) root.get("languageLevel"), lastRating) * expectedProgramVolume;
+            }
+            case 2 -> {
+                return getFactorB((Double) root.get("languageLevel"), lastRating) * expectedProgramVolume;
+
+            }
+            case 3 -> {
+                return getFactorC((Double) root.get("languageLevel"), lastRating) * expectedProgramVolume;
+            }
+            default -> throw new RuntimeException("Unsupported factor type: " + factorType);
+        }
+    }
 }
