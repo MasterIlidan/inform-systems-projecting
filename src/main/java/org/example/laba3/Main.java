@@ -45,30 +45,30 @@ public class Main {
 
         System.out.println("\nЗадание №2");
 
-        double countOfModules = main.getCountOfModules(allParams);
+        int countOfModules = main.getCountOfModules(allParams);
         System.out.println("Число модулей: " + countOfModules);
 
-        double countOfLevels = main.getCountOfLevels(allParams);
+        int countOfLevels = main.getCountOfLevels(allParams);
         System.out.println("Число уровней: " + countOfLevels);
 
-        double lengthOfProgram = main.getLengthOfProgram(countOfModules);
+        int lengthOfProgram = main.getLengthOfProgram(countOfModules);
         System.out.println("Длинна программы: " + lengthOfProgram);
 
-        double volumeOfProgram = main.getVolumeOfProgram(countOfModules);
+        int volumeOfProgram = main.getVolumeOfProgram(countOfModules);
         System.out.println("Объем прогрммного обеспечения: " + volumeOfProgram);
 
-        double assemblerCommandsCount = main.getAssemblerCommandsCount(lengthOfProgram);
+        int assemblerCommandsCount = main.getAssemblerCommandsCount(lengthOfProgram);
         System.out.println("Количество команд ассемблера: " + assemblerCommandsCount);
 
         int countOfProgrammers = 5;
         int performancePerProgrammer = 20;
-        double programCalendarTime = main.getProgramCalendarTime(lengthOfProgram, countOfProgrammers, performancePerProgrammer);
+        int programCalendarTime = main.getProgramCalendarTime(lengthOfProgram, countOfProgrammers, performancePerProgrammer);
         System.out.println("Время программирования (дни): " + programCalendarTime);
 
-        double potentialErrorsCount = main.getPotentialErrorsCount(volumeOfProgram);
+        int potentialErrorsCount = main.getPotentialErrorsCount(volumeOfProgram);
         System.out.println("Потенциальное количество ошибок: " + potentialErrorsCount);
 
-        double programReliability = main.getProgramReliability(programCalendarTime, potentialErrorsCount);
+        int programReliability = main.getProgramReliability(programCalendarTime, potentialErrorsCount);
         System.out.println("Начальная надежность программного обеспечения: " + programReliability);
 
 
@@ -88,24 +88,24 @@ public class Main {
             countOfErrors.add(((Long) value).intValue());
         }
 
-        double prevRating = main.getRatingByIteration(startRating, volume.get(0), countOfErrors.get(0),1);
+        double prevRating = main.getRatingByIteration(startRating, volume.get(0), countOfErrors.get(0), 1);
         System.out.printf("Count of program %d rating %f\n", 1, prevRating);
         for (int i = 1; i < countOfPrograms; i++) {
-            prevRating = main.getRatingByIteration(prevRating, volume.get(i), countOfErrors.get(i),1);
+            prevRating = main.getRatingByIteration(prevRating, volume.get(i), countOfErrors.get(i), 1);
             System.out.printf("Count of program %d rating %f\n", i + 1, prevRating);
         }
 
-        prevRating = main.getRatingByIteration(startRating, volume.get(0), countOfErrors.get(0),2);
+        prevRating = main.getRatingByIteration(startRating, volume.get(0), countOfErrors.get(0), 2);
         System.out.printf("Count of program %d rating %f\n", 1, prevRating);
         for (int i = 1; i < countOfPrograms; i++) {
-            prevRating = main.getRatingByIteration(prevRating, volume.get(i), countOfErrors.get(i),2);
+            prevRating = main.getRatingByIteration(prevRating, volume.get(i), countOfErrors.get(i), 2);
             System.out.printf("Count of program %d rating %f\n", i + 1, prevRating);
         }
 
-        prevRating = main.getRatingByIteration(startRating, volume.get(0), countOfErrors.get(0),3);
+        prevRating = main.getRatingByIteration(startRating, volume.get(0), countOfErrors.get(0), 3);
         System.out.printf("Count of program %d rating %f\n", 1, prevRating);
         for (int i = 1; i < countOfPrograms; i++) {
-            prevRating = main.getRatingByIteration(prevRating, volume.get(i), countOfErrors.get(i),3);
+            prevRating = main.getRatingByIteration(prevRating, volume.get(i), countOfErrors.get(i), 3);
             System.out.printf("Count of program %d rating %f\n", i + 1, prevRating);
         }
 
@@ -114,7 +114,7 @@ public class Main {
             double expectedErrors = main.getExpectedErrors(startRating,
                     estimatedSizeOfProgram,
                     i);
-            System.out.printf("Expected Errors (type %d): %.4f\n",i, expectedErrors);
+            System.out.printf("Expected Errors (type %d): %.4f\n", i, expectedErrors);
         }
 
     }
@@ -172,42 +172,42 @@ public class Main {
         return Math.pow(programVolume, 2) / (3000 * languageLevel);
     }
 
-    public double getCountOfModules(int allParams) {
+    public int getCountOfModules(int allParams) {
         double countOfModules = (double) allParams / 8;
         if (countOfModules > 8) {
             countOfModules = ((double) allParams / 8) + ((double) allParams / (Math.pow(8, 2)));
         } else {
-            return countOfModules;
+            return (int) Math.round(countOfModules);
         }
-        return countOfModules;
+        return (int) Math.round(countOfModules);
     }
 
-    public double getCountOfLevels(int allParams) {
-        return (Math.log(allParams) / 3) + 1;
+    public int getCountOfLevels(int allParams) {
+        return (int) Math.round((Math.log(allParams) / 3) + 1);
     }
 
-    public double getLengthOfProgram(double countOfModules) {
-        return (220 * countOfModules) + (countOfModules * Math.log(countOfModules));
+    public int getLengthOfProgram(double countOfModules) {
+        return (int)((220 * countOfModules) + (countOfModules * Math.log(countOfModules)));
     }
 
-    public double getVolumeOfProgram(double programModules) {
-        return programModules * 220 * (Math.log(48));
+    public int getVolumeOfProgram(double programModules) {
+        return (int) (programModules * 220 * (Math.log(48)));
     }
 
-    public double getAssemblerCommandsCount(double programLength) {
-        return (3 * programLength) / 8;
+    public int getAssemblerCommandsCount(double programLength) {
+        return (int) ((3 * programLength) / 8);
     }
 
-    public double getProgramCalendarTime(double programLength, int countOfProgrammers, int perfomancePerProgrammer) {
-        return (3 * programLength) / (8 * countOfProgrammers * perfomancePerProgrammer);
+    public int getProgramCalendarTime(double programLength, int countOfProgrammers, int performancePerProgrammer) {
+        return (int) ((3 * programLength) / (8 * countOfProgrammers * performancePerProgrammer));
     }
 
-    public double getPotentialErrorsCount(double programVolume) {
-        return programVolume / 3000;
+    public int getPotentialErrorsCount(double programVolume) {
+        return (int) ( programVolume / 3000);
     }
 
-    public double getProgramReliability(double x, double potentialErrorsCount) {
-        return x * 8 / 2 * Math.log(potentialErrorsCount);
+    public int getProgramReliability(double x, double potentialErrorsCount) {
+        return (int) ( x * 8 / 2 * Math.log(potentialErrorsCount));
     }
 
     public double getRatingByIteration(double rating, double volume, double errorCount, int factorType) {
@@ -217,7 +217,6 @@ public class Main {
             }
             case 2 -> {
                 return rating * (1 + (double) 1 / 1000 * (volume - (errorCount / getFactorB((Double) root.get("languageLevel"), rating))));
-
             }
             case 3 -> {
                 return rating * (1 + (double) 1 / 1000 * (volume - (errorCount / getFactorC((Double) root.get("languageLevel"), rating))));
@@ -245,7 +244,6 @@ public class Main {
             }
             case 2 -> {
                 return getFactorB((Double) root.get("languageLevel"), lastRating) * expectedProgramVolume;
-
             }
             case 3 -> {
                 return getFactorC((Double) root.get("languageLevel"), lastRating) * expectedProgramVolume;
