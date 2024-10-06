@@ -1,0 +1,9 @@
+{
+  "countOfFailures": 6,
+  "countOfExperiments": 1200,
+  "avgRecoveryTime": [0.8,1.4],
+  "allowedRecoveryTime": 0.95,
+  "factDurationOfChange": [8,12],
+  "allowedDurationOfChange": 14,
+  "baseCriteriaOfDurability": 0.94
+}
